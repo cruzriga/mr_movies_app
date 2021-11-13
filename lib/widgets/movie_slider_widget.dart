@@ -80,6 +80,7 @@ class _MoviesPoster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    movie.heroId = 'swiper-${movie.id}';
     return Container(
       width: 130,
       height: 190,
@@ -89,14 +90,17 @@ class _MoviesPoster extends StatelessWidget {
           onTap: () => Navigator.pushNamed(context, 'details', arguments: movie),
           child: Column(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: FadeInImage(
-                  placeholder: const AssetImage('assets/no-image.jpg'),
-                  image: NetworkImage(movie.posterFullPath),
-                  fit: BoxFit.cover,
-                  width: 130,
-                  height: 190,
+              Hero(
+                tag: movie.heroId!,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: FadeInImage(
+                    placeholder: const AssetImage('assets/no-image.jpg'),
+                    image: NetworkImage(movie.posterFullPath),
+                    fit: BoxFit.cover,
+                    width: 130,
+                    height: 190,
+                  ),
                 ),
               ),
               const SizedBox(

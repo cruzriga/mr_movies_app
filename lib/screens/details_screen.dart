@@ -7,7 +7,6 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Movie movie =  ModalRoute.of(context)!.settings.arguments as Movie;
-
     return Scaffold(
         body: CustomScrollView(
           slivers: [
@@ -18,7 +17,7 @@ class DetailsScreen extends StatelessWidget {
                   _Overview(movie),
                   _Overview(movie),
                   _Overview(movie),
-                  CastingCardWidget()
+                  CastingCardWidget(movie.id)
                 ])),
           ],
         )

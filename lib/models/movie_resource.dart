@@ -41,6 +41,12 @@ class Movie {
         :'https://image.tmdb.org/t/p/w500/${posterPath}';
   }
 
+  get backdropFullPath {
+    return (this.backdropPath == null)
+        ?'https://via.placeholder.com/300x400'
+        :'https://image.tmdb.org/t/p/w500/${backdropPath}';
+  }
+
   factory Movie.fromJson(String str) => Movie.fromMap(json.decode(str));
 
   factory Movie.fromMap(Map<String, dynamic> json) => Movie(

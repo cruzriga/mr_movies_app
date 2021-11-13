@@ -11,46 +11,38 @@ class MoviesProvider extends ChangeNotifier {
 
   List<Movie> onDisplayMovies = [];
   List<Movie> popularMovies = [];
+  int popularPage = 0;
   MoviesProvider(){
     print('movies provider init');
     getOnDisplayMovies();
     getPopularMovies();
   }
 
-  getOnDisplayMovies() async{
-    var api = Uri.https(_baseUrl, '/3/movie/now_playing', {
+  Future<String> _getJsonData(String endpoint , [int page = 1]) async {
+    var api = Uri.https(_baseUrl, endpoint , {
       'api_key' : _apikey,
       'language': _lang,
-      'page'    : '1'
+      'page'    : '$page'
     });
 
     // Await the http get response, then decode the json-formatted response.
     final response = await http.get(api);
-    if (response.statusCode == 200) {
-     final nowPlaying = NowPlayingResource.fromJson(response.body);
-      onDisplayMovies = nowPlaying.results;
-      notifyListeners();
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+    return response.body;
+  }
+
+  getOnDisplayMovies() async{
+    const String endpoint = '/3/movie/now_playing';
+    onDisplayMovies = NowPlayingResource.fromJson(await _getJsonData(endpoint)).results;
+    notifyListeners();
+
   }
 
 
   getPopularMovies() async{
-    var api = Uri.https(_baseUrl, '/3/movie/popular', {
-      'api_key' : _apikey,
-      'language': _lang,
-      'page'    : '1'
-    });
-
-    // Await the http get response, then decode the json-formatted response.
-    final response = await http.get(api);
-    if (response.statusCode == 200) {
-      final popular = MoviePopularResource.fromJson(response.body);
-      popularMovies = [...popularMovies, ...popular.results];
-      notifyListeners();
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+    const String endpoint = '/3/movie/popular';
+    popularPage++;
+    final popular = MoviePopularResource.fromJson(await _getJsonData(endpoint, popularPage )).results;
+    popularMovies = [...popularMovies, ...popular];
+    notifyListeners();
   }
 }

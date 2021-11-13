@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mr_movies_app/widgets/casting_card_widget.dart';
 
 // ignore: use_key_in_widget_constructors
 class DetailsScreen extends StatelessWidget {
@@ -18,7 +18,7 @@ class DetailsScreen extends StatelessWidget {
                   _Overview(),
                   _Overview(),
                   _Overview(),
-                
+                  CastingCardWidget()
                 ])),
           ],
         )

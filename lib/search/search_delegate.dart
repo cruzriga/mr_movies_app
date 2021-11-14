@@ -46,13 +46,14 @@ class MovieSearchDelegate extends SearchDelegate {
     }
 
     final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
-    return FutureBuilder(
-      future: moviesProvider.getMovieSearch(query),
-      builder: (context, AsyncSnapshot<List<Movie>> snapshot) {
-        if (!snapshot.hasData) {
-          return ContainerEmpty();
-        }
+    moviesProvider.getSuggestionByQuery(query);
+
+    return StreamBuilder(
+      stream: moviesProvider.suggestStream,
+      builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
+        if(!snapshot.hasData) return ContainerEmpty();;
         final List<Movie> movies = snapshot.data!;
+        if (movies.isEmpty) return ContainerEmpty();
         return ListView.builder(
             itemCount: movies.length,
             itemBuilder: (_, index){
